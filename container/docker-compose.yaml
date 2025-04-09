@@ -1,4 +1,8 @@
 version: '3'
+
+volumes:
+  db_volume: 
+
 services:
   db:
     image: mariadb
@@ -8,9 +12,11 @@ services:
       MYSQL_USER: app
       MYSQL_PASSWORD: app
     volumes:
-      - ./db:/var/lib/mysql
+      - db_volume:/var/lib/mysql
+    # why no port forwarding?
 
   app:
+    # image: app
     build:
       context: ../app
     ports:
@@ -19,4 +25,8 @@ services:
       DB_HOST: db
     depends_on:
       - db
-      
+  
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
